@@ -1,2 +1,7 @@
 .env
 venv/
+VALHALLA/custom_files
+data/input/*
+data/output/*
+.valhalla_updated
+.DS_Store

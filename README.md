@@ -10,17 +10,8 @@ To get started with the project, follow these steps:
 2. Create a virtual environment using `venv`.
 3. Activate the virtual environment.
 4. Install the dependencies using `pip install -r requirements.txt`.
-5. Run the application using `python src/main.py`.
-
-## Contributing
-
-If you would like to contribute to the project, please follow these steps:
-
-1. Fork the repository.
-2. Create a new branch for your feature or bug fix.
-3. Make your changes and commit them.
-4. Push your changes to your fork.
-5. Submit a pull request.
+5. Install docker or run the project in a codespace.
+6. make all
 
 ## License
 

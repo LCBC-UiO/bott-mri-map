@@ -1,6 +1,4 @@
-.PHONY: all valhalla isochrones population bottmap download_ruter
-
-
+.PHONY: all valhalla
 # ROUTING ENGINE
 VALHALLA_SENTINEL=.valhalla_updated
 
@@ -11,7 +9,7 @@ ${VALHALLA_SENTINEL}:
 			docker start valhalla; \
 		fi \
 	else \
-		docker run -t --name valhalla -p 8002:8002 -v ${LOCAL_WORKSPACE_FOLDER}/VALHALLA/custom_files:/custom_files -e tile_urls=https://download.geofabrik.de/europe/norway-latest.osm.pbf ghcr.io/gis-ops/docker-valhalla/valhalla:latest; \
+		docker run -t --name valhalla -p 8002:8002 -v ${PWD}/VALHALLA/custom_files:/custom_files --env-file ${PWD}/valhalla.env ghcr.io/gis-ops/docker-valhalla/valhalla:latest; \
 	fi
 	touch ${VALHALLA_SENTINEL}
 
@@ -23,7 +21,7 @@ data/output/isochrones.shp: ${VALHALLA_SENTINEL}
 isochrones: data/output/isochrones.shp
 
 # GENERATE AND SAVE POPULATION_MATRIX
-data/output/population.shp: ${VALHALLA_SENTINEL}
+data/output/population.shp: ${POPULATION_FILES} ${RUTER_FILES}
 	@echo "Generating population matrix..."
 	python src/population.py
 
@@ -72,11 +70,11 @@ ${COUNTRIES_FILES}: ${COUNTRIES_ZIP}
 	unzip -o $< -d data/input/countries && touch ${COUNTRIES_FILES}
 
 # Rule for creating bottmap.png from running src/bottmap.py
-data/output/norway_map_with_isochrones.png: src/bottmap.py
+data/output/norway_map_with_isochrones.png: data/output/population.shp data/output/isochrones.shp ${COUNTRIES_FILES} ${RUTER_FILES} ${POPULATION_FILES}
 	python src/bottmap.py
 
 bottmap: data/output/norway_map_with_isochrones.png
 
 ########################################################################################
-all: valhalla isochrones population download_ruter download_population download_countries bottmap
+all: bottmap
 

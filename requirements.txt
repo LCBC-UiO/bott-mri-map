@@ -1,10 +1,6 @@
 pandas
 geopandas
 routingpy
-folium
-leaflet
-python-dotenv
-mapclassify
 matplotlib
+shapely
 ipympl
-osmnx
